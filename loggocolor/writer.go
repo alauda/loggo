@@ -5,7 +5,7 @@ import (
 	"io"
 	"path/filepath"
 
-	"github.com/juju/loggo"
+	"github.com/alauda/loggo"
 	"github.com/juju/ansiterm"
 )
 

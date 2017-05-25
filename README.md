@@ -1,8 +1,8 @@
 
 # loggo
-    import "github.com/juju/loggo"
+    import "github.com/alauda/loggo"
 
-[![GoDoc](https://godoc.org/github.com/juju/loggo?status.svg)](https://godoc.org/github.com/juju/loggo)
+[![GoDoc](https://godoc.org/github.com/alauda/loggo?status.svg)](https://godoc.org/github.com/alauda/loggo)
 
 ### Module level logging for Go
 This package provides an alternative to the standard library log package.

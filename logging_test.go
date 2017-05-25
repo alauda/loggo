@@ -8,7 +8,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/loggo"
+	"github.com/alauda/loggo"
 )
 
 type LoggingSuite struct {
@@ -89,4 +89,30 @@ func (s *LoggingSuite) TestLogDoesntLogWeirdLevels(c *gc.C) {
 
 	s.logger.Logf(loggo.CRITICAL+loggo.Level(1), "message")
 	c.Assert(s.writer.Log(), gc.HasLen, 0)
+}
+
+func (s *LoggingSuite) TestStructuredLog(c *gc.C) {
+	// s.logger.StDebug("my message", loggo.Fields{"this": "is", "a": "test"})
+	// s.logger.Sr
+	// s.logger.Criticalf("critical message") //tag critical-location
+	// s.logger.Errorf("error message")       //tag error-location
+	// s.logger.Warningf("warning message")   //tag warning-location
+	// s.logger.Infof("info message")         //tag info-location
+	// s.logger.Debugf("debug message")       //tag debug-location
+	// s.logger.Tracef("trace message")       //tag trace-location
+
+	// log := s.writer.Log()
+	// tags := []string{
+	// 	"critical-location",
+	// 	"error-location",
+	// 	"warning-location",
+	// 	"info-location",
+	// 	"debug-location",
+	// 	"trace-location",
+	// }
+	// c.Assert(log, gc.HasLen, 1)
+	// c.Fail()
+	// for x := range tags {
+	// 	assertLocation(c, log[x], tags[x])
+	// }
 }

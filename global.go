@@ -28,8 +28,8 @@ func LoggerInfo() string {
 
 // GetLogger returns a Logger for the given module name,
 // creating it and its parents if necessary.
-func GetLogger(name string) Logger {
-	return defaultContext.GetLogger(name)
+func GetLogger(name string, size ...int) Logger {
+	return defaultContext.GetLogger(name, size...)
 }
 
 // ResetLogging iterates through the known modules and sets the levels of all

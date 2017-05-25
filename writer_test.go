@@ -9,7 +9,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/loggo"
+	"github.com/alauda/loggo"
 )
 
 type SimpleWriterSuite struct{}

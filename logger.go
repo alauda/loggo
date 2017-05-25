@@ -4,10 +4,14 @@
 package loggo
 
 import (
+	"bytes"
 	"fmt"
 	"runtime"
 	"time"
 )
+
+// Fields for structured logging
+type Fields map[string]interface{}
 
 // A Logger represents a logging module. It has an associated logging
 // level which can be changed; messages of lesser severity will
@@ -18,6 +22,7 @@ import (
 // to it will be sent to the root Logger.
 type Logger struct {
 	impl *module
+	size int
 }
 
 func (logger Logger) getModule() *module {
@@ -137,6 +142,84 @@ func (logger Logger) Debugf(message string, args ...interface{}) {
 // Tracef logs the printf-formatted message at trace level.
 func (logger Logger) Tracef(message string, args ...interface{}) {
 	logger.Logf(TRACE, message, args...)
+}
+
+func limitString(message string, size int, char rune) string {
+	if len(message) == size {
+		return message
+	} else if len(message) > size {
+		return message[:size]
+	} else {
+		runes := make([]byte, size)
+		copy(runes, []byte(message))
+		byteRune := byte(char)
+		for i := len(message); i < size; i++ {
+			runes[i] = byteRune
+		}
+		return string(runes)
+	}
+}
+
+func (logger Logger) generateStructured(message string, fields Fields) (format string, args []interface{}) {
+	var buf bytes.Buffer
+	args = make([]interface{}, 1+len(fields)*2)
+	index := 0
+	if logger.size > 0 {
+		message = limitString(message, logger.size, ' ')
+	}
+	args[index] = message
+	index++
+
+	buf.WriteString("%s")
+	for k, v := range fields {
+		buf.WriteString("\t%s")
+		args[index] = k
+		index++
+
+		buf.WriteString("=")
+
+		buf.WriteString("%s")
+		args[index] = v
+		index++
+	}
+	format = buf.String()
+	return
+}
+
+// StCritical structured logs at critical level.
+func (logger Logger) StCritical(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(CRITICAL, format, args...)
+}
+
+// StError structured logs at error level.
+func (logger Logger) StError(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(ERROR, format, args...)
+}
+
+// StWarning structured logs at  warning level.
+func (logger Logger) StWarning(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(WARNING, format, args...)
+}
+
+// StInfo structured logs at  info level.
+func (logger Logger) StInfo(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(INFO, format, args...)
+}
+
+// StDebug structured logs at  debug level.
+func (logger Logger) StDebug(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(DEBUG, format, args...)
+}
+
+// StTrace structured logs at trace level.
+func (logger Logger) StTrace(message string, fields Fields) {
+	format, args := logger.generateStructured(message, fields)
+	logger.Logf(TRACE, format, args...)
 }
 
 // IsLevelEnabled returns whether debugging is enabled

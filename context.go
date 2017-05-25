@@ -45,11 +45,15 @@ func NewContext(rootLevel Level) *Context {
 
 // GetLogger returns a Logger for the given module name, creating it and
 // its parents if necessary.
-func (c *Context) GetLogger(name string) Logger {
+func (c *Context) GetLogger(name string, size ...int) Logger {
 	name = strings.TrimSpace(strings.ToLower(name))
 	c.modulesMutex.Lock()
 	defer c.modulesMutex.Unlock()
-	return Logger{c.getLoggerModule(name)}
+	bufferSize := 0
+	if len(size) > 0 {
+		bufferSize = size[0]
+	}
+	return Logger{c.getLoggerModule(name), bufferSize}
 }
 
 func (c *Context) getLoggerModule(name string) *module {

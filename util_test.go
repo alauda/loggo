@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/juju/loggo"
+	"github.com/alauda/loggo"
 
 	gc "gopkg.in/check.v1"
 )
