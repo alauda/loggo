@@ -187,6 +187,7 @@ func (logger Logger) generateStructured(message string, fields Fields) (format s
 		args[index] = v
 		index++
 	}
+	format = buf.String()
 	return
 }
 
